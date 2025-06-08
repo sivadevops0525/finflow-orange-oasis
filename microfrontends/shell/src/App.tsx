@@ -22,7 +22,7 @@ const App = () => {
               <AppSidebar />
               <main className="flex-1 overflow-hidden">
                 <Routes>
-                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/" element={<Navigate to="/dashboard\" replace />} />
                   <Route 
                     path="/dashboard" 
                     element={
