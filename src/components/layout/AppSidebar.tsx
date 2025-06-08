@@ -7,8 +7,8 @@ import {
   Heart,
   BarChart3,
   Home,
-  Menu,
-  Wallet
+  Wallet,
+  User
 } from "lucide-react";
 import {
   Sidebar,
@@ -21,9 +21,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useLocation, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const menuItems = [
   {
@@ -56,10 +56,16 @@ const menuItems = [
     url: "/reports",
     icon: BarChart3,
   },
+  {
+    title: "Profile",
+    url: "/profile",
+    icon: User,
+  },
 ];
 
 export function AppSidebar() {
   const location = useLocation();
+  const { user } = useAuth();
 
   return (
     <Sidebar className="border-r-0">
@@ -112,11 +118,16 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border p-4">
         <div className="flex items-center gap-3 px-3 py-2">
           <div className="h-8 w-8 rounded-full gradient-orange flex items-center justify-center">
-            <DollarSign className="h-4 w-4 text-white" />
+            <User className="h-4 w-4 text-white" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium">Demo User</p>
-            <p className="text-xs text-muted-foreground">demo@finflow.com</p>
+            <p className="text-sm font-medium">
+              {user?.first_name && user?.last_name 
+                ? `${user.first_name} ${user.last_name}`
+                : user?.username || 'User'
+              }
+            </p>
+            <p className="text-xs text-muted-foreground">{user?.email}</p>
           </div>
         </div>
       </SidebarFooter>

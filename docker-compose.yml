@@ -1,0 +1,93 @@
+
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: finflow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - finflow-network
+
+  # Auth Service
+  auth-service:
+    build: ./backend/auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: finflow_auth
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET_KEY: your-secret-key-change-in-production
+      SMTP_SERVER: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USERNAME: your-email@gmail.com
+      SMTP_PASSWORD: your-app-password
+      FRONTEND_URL: http://localhost:3000
+    depends_on:
+      - postgres
+    networks:
+      - finflow-network
+
+  # Finance Service
+  finance-service:
+    build: ./backend/finance-service
+    ports:
+      - "5002:5002"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: finflow_finance
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET_KEY: your-secret-key-change-in-production
+      AUTH_SERVICE_URL: http://auth-service:5001
+    depends_on:
+      - postgres
+      - auth-service
+    networks:
+      - finflow-network
+
+  # API Gateway
+  api-gateway:
+    build: ./backend/api-gateway
+    ports:
+      - "5000:5000"
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:5001
+      FINANCE_SERVICE_URL: http://finance-service:5002
+    depends_on:
+      - auth-service
+      - finance-service
+    networks:
+      - finflow-network
+
+  # Frontend (Main App)
+  frontend-main:
+    build: ./frontend/main-app
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:5000
+    volumes:
+      - ./frontend/main-app:/app
+      - /app/node_modules
+    networks:
+      - finflow-network
+
+volumes:
+  postgres_data:
+
+networks:
+  finflow-network:
+    driver: bridge
