@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  # Main Shell Application
+  shell:
+    build:
+      context: ./microfrontends/shell
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DASHBOARD_URL=http://dashboard:3001
+      - EXPENSES_URL=http://expenses:3002
+      - INCOME_URL=http://income:3003
+      - BUDGET_URL=http://budget:3004
+      - WISHLIST_URL=http://wishlist:3005
+      - REPORTS_URL=http://reports:3006
+    depends_on:
+      - dashboard
+      - expenses
+      - income
+      - budget
+      - wishlist
+      - reports
+    networks:
+      - finflow-network
+
+  # Dashboard Microfrontend
+  dashboard:
+    build:
+      context: ./microfrontends/dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    networks:
+      - finflow-network
+
+  # Expenses Microfrontend
+  expenses:
+    build:
+      context: ./microfrontends/expenses
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+    networks:
+      - finflow-network
+
+  # Income Microfrontend
+  income:
+    build:
+      context: ./microfrontends/income
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+    networks:
+      - finflow-network
+
+  # Budget Microfrontend
+  budget:
+    build:
+      context: ./microfrontends/budget
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+    networks:
+      - finflow-network
+
+  # Wishlist Microfrontend
+  wishlist:
+    build:
+      context: ./microfrontends/wishlist
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+    networks:
+      - finflow-network
+
+  # Reports Microfrontend
+  reports:
+    build:
+      context: ./microfrontends/reports
+      dockerfile: Dockerfile
+    ports:
+      - "3006:3006"
+    environment:
+      - NODE_ENV=production
+      - PORT=3006
+    networks:
+      - finflow-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    build:
+      context: ./infrastructure/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - shell
+    networks:
+      - finflow-network
+
+networks:
+  finflow-network:
+    driver: bridge
+
+volumes:
+  node_modules_cache:
