@@ -1,124 +1,118 @@
 
-# FinFlow - Microservices Financial Management Application
+# FinFlow - Personal Finance Management System
 
-A modern, production-grade financial management application built with microservices architecture.
+A modern, microservices-based personal finance management application built with React frontend and Python Flask backend.
 
-## Architecture Overview
+## Architecture
 
-### Backend Microservices
-- **API Gateway** (Port 5000): Routes requests to appropriate services
-- **Auth Service** (Port 5001): Handles user authentication and authorization
-- **Finance Service** (Port 5002): Manages financial data (expenses, income, budgets, wishlist)
-- **PostgreSQL Database**: Separate databases for each service
+### Frontend (Microfrontends)
+- **Main App**: React application with TypeScript, Tailwind CSS, and shadcn/ui components
+- **Authentication**: Login, Register, Forgot Password, Reset Password
+- **Financial Management**: Expenses, Income, Budget, Wishlist tracking
+- **Reports**: Financial analytics and visualizations
 
-### Frontend Microfrontends
-- **Main App** (Port 3000): React application with modern UI
+### Backend (Microservices)
+- **Auth Service**: User authentication, registration, password management
+- **Finance Service**: Expenses, income, budget, and wishlist management
+- **API Gateway**: Central entry point that routes requests to appropriate services
+- **Database**: PostgreSQL with separate databases for auth and finance data
+
+## Project Structure
+
+```
+finflow/
+├── frontend/
+│   └── main-app/              # React frontend application
+│       ├── src/
+│       │   ├── components/    # Reusable UI components
+│       │   ├── pages/         # Application pages
+│       │   ├── contexts/      # React contexts (Auth, etc.)
+│       │   └── lib/           # Utilities and configurations
+│       ├── Dockerfile
+│       └── package.json
+├── backend/
+│   ├── auth-service/          # Authentication microservice
+│   │   ├── app.py
+│   │   ├── requirements.txt
+│   │   └── Dockerfile
+│   ├── finance-service/       # Finance management microservice
+│   │   ├── app.py
+│   │   ├── requirements.txt
+│   │   └── Dockerfile
+│   ├── api-gateway/           # API Gateway
+│   │   ├── app.py
+│   │   ├── requirements.txt
+│   │   └── Dockerfile
+│   └── init-db.sql           # Database initialization
+├── docker-compose.yml        # Container orchestration
+└── .env.example              # Environment variables template
+```
 
 ## Features
 
 ### Authentication
 - User registration and login
 - Password reset via email
-- JWT-based authentication
-- Password change functionality
-- Secure session management
+- JWT token-based authentication
+- Profile management
 
 ### Financial Management
-- Expense tracking with categories
-- Income management
-- Budget planning and monitoring
-- Wishlist with savings goals
-- Financial reports and analytics
+- **Expenses**: Track daily expenses with categories
+- **Income**: Record income from various sources
+- **Budget**: Set and monitor budgets by category
+- **Wishlist**: Track financial goals and priorities
+- **Reports**: Visualize spending patterns and financial health
 
 ### Technical Features
 - Microservices architecture
-- Docker containerization
-- PostgreSQL with separate databases
-- JWT authentication
 - RESTful APIs
-- Modern React frontend with TypeScript
-- Responsive design with Tailwind CSS
-- Real-time data visualization with Recharts
+- JWT authentication
+- PostgreSQL database
+- Docker containerization
+- Responsive design
+- Real-time data updates
 
 ## Quick Start
 
 ### Prerequisites
 - Docker and Docker Compose
-- Node.js 18+ (for local development)
-- Python 3.11+ (for local development)
+- Git
 
-### Using Docker Compose (Recommended)
-
-1. Clone the repository
-2. Set up environment variables:
+### Environment Setup
+1. Copy the environment template:
    ```bash
    cp .env.example .env
-   # Edit .env with your configuration
    ```
 
-3. Start all services:
+2. Update the `.env` file with your configurations:
+   - Database credentials
+   - JWT secret key
+   - Email settings (for password reset)
+
+### Running the Application
+
+1. Clone the repository:
    ```bash
-   docker-compose up -d
+   git clone <repository-url>
+   cd finflow
    ```
 
-4. Access the application:
+2. Start all services with Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+
+3. Access the application:
    - Frontend: http://localhost:3000
    - API Gateway: http://localhost:5000
    - Auth Service: http://localhost:5001
    - Finance Service: http://localhost:5002
+   - Database: localhost:5432
 
-### Local Development
-
-#### Backend Services
-
-1. **Auth Service**:
-   ```bash
-   cd backend/auth-service
-   pip install -r requirements.txt
-   python app.py
-   ```
-
-2. **Finance Service**:
-   ```bash
-   cd backend/finance-service
-   pip install -r requirements.txt
-   python app.py
-   ```
-
-3. **API Gateway**:
-   ```bash
-   cd backend/api-gateway
-   pip install -r requirements.txt
-   python app.py
-   ```
-
-#### Frontend
-
-```bash
-cd frontend/main-app
-npm install
-npm run dev
-```
-
-## Environment Configuration
-
-### Required Environment Variables
-
-**Database:**
-- `DB_HOST`: PostgreSQL host
-- `DB_PORT`: PostgreSQL port
-- `DB_USER`: Database username
-- `DB_PASSWORD`: Database password
-
-**Authentication:**
-- `JWT_SECRET_KEY`: Secret key for JWT tokens
-- `FRONTEND_URL`: Frontend URL for password reset links
-
-**Email (for password reset):**
-- `SMTP_SERVER`: SMTP server address
-- `SMTP_PORT`: SMTP server port
-- `SMTP_USERNAME`: Email username
-- `SMTP_PASSWORD`: Email password
+### Service Health Check
+- API Gateway: http://localhost:5000/health
+- Auth Service: http://localhost:5001/health
+- Finance Service: http://localhost:5002/health
 
 ## API Documentation
 
@@ -127,61 +121,73 @@ npm run dev
 - `POST /api/auth/login` - User login
 - `POST /api/auth/forgot-password` - Request password reset
 - `POST /api/auth/reset-password` - Reset password with token
+- `POST /api/auth/change-password` - Change password (authenticated)
 - `GET /api/auth/profile` - Get user profile
-- `POST /api/auth/change-password` - Change password
+- `PUT /api/auth/profile` - Update user profile
 
 ### Finance Endpoints
 - `GET /api/expenses` - Get user expenses
 - `POST /api/expenses` - Create expense
+- `PUT /api/expenses/{id}` - Update expense
 - `DELETE /api/expenses/{id}` - Delete expense
 - `GET /api/incomes` - Get user incomes
 - `POST /api/incomes` - Create income
+- `PUT /api/incomes/{id}` - Update income
 - `DELETE /api/incomes/{id}` - Delete income
 - `GET /api/budgets` - Get user budgets
 - `POST /api/budgets` - Create budget
+- `PUT /api/budgets/{id}` - Update budget
 - `DELETE /api/budgets/{id}` - Delete budget
 - `GET /api/wishlist` - Get user wishlist
 - `POST /api/wishlist` - Create wishlist item
+- `PUT /api/wishlist/{id}` - Update wishlist item
 - `DELETE /api/wishlist/{id}` - Delete wishlist item
 
-## Database Schema
+## Development
 
-### Auth Service Database (finflow_auth)
-- `users` - User account information
-- `password_reset_tokens` - Password reset tokens
+### Frontend Development
+```bash
+cd frontend/main-app
+npm install
+npm run dev
+```
 
-### Finance Service Database (finflow_finance)
-- `expenses` - User expenses
-- `incomes` - User income sources
-- `budgets` - User budgets
-- `wishlist` - User wishlist items
-- `monthly_reports` - Financial reports
+### Backend Development
+Each service can be run independently:
 
-## Security Features
+```bash
+# Auth Service
+cd backend/auth-service
+pip install -r requirements.txt
+python app.py
 
-- JWT-based authentication
-- Password hashing with bcrypt
-- SQL injection prevention
-- CORS configuration
-- Input validation
-- Secure password reset flow
+# Finance Service
+cd backend/finance-service
+pip install -r requirements.txt
+python app.py
+
+# API Gateway
+cd backend/api-gateway
+pip install -r requirements.txt
+python app.py
+```
 
 ## Deployment
 
-### Production Deployment with Docker
+The application is containerized and can be deployed using Docker Compose on any Docker-compatible platform:
 
-1. Update environment variables for production
-2. Build and deploy:
-   ```bash
-   docker-compose -f docker-compose.prod.yml up -d
-   ```
+1. Production deployment with Docker Compose
+2. Kubernetes deployment (requires creating K8s manifests)
+3. Cloud deployment (AWS ECS, Google Cloud Run, etc.)
 
-### Health Monitoring
+## Security Features
 
-Health check endpoints are available:
-- API Gateway: `GET /health`
-- Auth Service: `GET /health`
-- Finance Service: `GET /health`
+- JWT token authentication
+- Password hashing with bcrypt
+- CORS protection
+- Input validation
+- SQL injection prevention
+- Environment-based configuration
 
 ## Contributing
 
