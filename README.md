@@ -1,73 +1,181 @@
-# Welcome to your Lovable project
 
-## Project info
+# FinFlow - Personal Financial Manager
 
-**URL**: https://lovable.dev/projects/3ec901e6-4cac-4cd8-8acb-9176381c6b72
+A microservices-based financial management application with React frontend and Python backend.
 
-## How can I edit this code?
+## 🏗️ Architecture
 
-There are several ways of editing your application.
+This application follows a microservices architecture:
 
-**Use Lovable**
+### Frontend
+- **Main App**: React application with Vite, TypeScript, and Tailwind CSS
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3ec901e6-4cac-4cd8-8acb-9176381c6b72) and start prompting.
+### Backend Services
+- **API Gateway**: Routes requests to appropriate microservices (Port 5000)
+- **Auth Service**: Handles authentication and user management (Port 5001)
+- **Finance Service**: Manages financial data (expenses, income, budget) (Port 5002)
+- **PostgreSQL Database**: Data persistence (Port 5432)
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Quick Start
 
-**Use your preferred IDE**
+### Prerequisites
+- Docker and Docker Compose
+- Git
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Running the Application
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd finflow
+```
 
-Follow these steps:
+2. Start all services:
+```bash
+docker-compose up --build
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. Access the application:
+- Frontend: http://localhost:3000
+- API Gateway: http://localhost:5000
+- Auth Service: http://localhost:5001
+- Finance Service: http://localhost:5002
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🔐 Authentication
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Test Credentials (No Database Required)
+These credentials work without database connection:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+- Username: `testuser` | Password: `testpass123`
+- Username: `admin` | Password: `admin123`
+- Username: `demo` | Password: `demo123`
+
+### Database Users
+For production users, register through the app. User data will be stored in PostgreSQL.
+
+## 📁 Project Structure
+
+```
+finflow/
+├── frontend/
+│   └── main-app/                 # React frontend
+│       ├── src/
+│       ├── Dockerfile
+│       └── package.json
+├── backend/
+│   ├── auth-service/             # Authentication microservice
+│   │   ├── app.py
+│   │   ├── requirements.txt
+│   │   └── Dockerfile
+│   ├── finance-service/          # Finance data microservice
+│   │   ├── app.py
+│   │   ├── requirements.txt
+│   │   └── Dockerfile
+│   ├── api-gateway/              # API Gateway
+│   │   ├── app.py
+│   │   ├── requirements.txt
+│   │   └── Dockerfile
+│   └── init-db.sql              # Database initialization
+├── docker-compose.yml           # Orchestration
+└── README.md
+```
+
+## 🛠️ Development
+
+### Environment Variables
+Copy `.env.example` to `.env` and update values:
+```bash
+cp .env.example .env
+```
+
+### Running Individual Services
+
+#### Backend Services
+```bash
+# Auth Service
+cd backend/auth-service
+pip install -r requirements.txt
+python app.py
+
+# Finance Service
+cd backend/finance-service
+pip install -r requirements.txt
+python app.py
+
+# API Gateway
+cd backend/api-gateway
+pip install -r requirements.txt
+python app.py
+```
+
+#### Frontend
+```bash
+cd frontend/main-app
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🔄 API Endpoints
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/verify` - Token verification
 
-**Use GitHub Codespaces**
+### Finance
+- `GET /api/finance/expenses` - Get user expenses
+- `POST /api/finance/expenses` - Add new expense
+- `GET /api/finance/income` - Get user income
+- `POST /api/finance/income` - Add new income
+- `GET /api/finance/budget` - Get user budget
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🗄️ Database
 
-## What technologies are used for this project?
+### Tables
+- `users` - User accounts
+- `expenses` - User expenses
+- `income` - User income records
+- `budgets` - Budget categories
+- `wishlist` - User wishlist items
 
-This project is built with:
+### Connection
+- Host: localhost (or postgres in Docker)
+- Port: 5432
+- Database: finflow_db
+- Username: finflow
+- Password: finflow123
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🔧 Features
 
-## How can I deploy this project?
+- ✅ User Authentication (Login/Register)
+- ✅ Test Credentials Support
+- ✅ Expense Tracking
+- ✅ Income Management
+- ✅ Budget Planning
+- ✅ Wishlist Management
+- ✅ Financial Reports
+- ✅ Responsive Design
+- ✅ Microservices Architecture
+- ✅ Docker Containerization
 
-Simply open [Lovable](https://lovable.dev/projects/3ec901e6-4cac-4cd8-8acb-9176381c6b72) and click on Share -> Publish.
+## 🚀 Deployment
 
-## Can I connect a custom domain to my Lovable project?
+The application is containerized and can be deployed to any Docker-compatible platform:
 
-Yes, you can!
+- AWS ECS/EKS
+- Google Cloud Run/GKE
+- Azure Container Instances/AKS
+- Digital Ocean App Platform
+- Heroku (with Docker)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🤝 Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License.
