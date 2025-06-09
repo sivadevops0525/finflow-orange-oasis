@@ -67,28 +67,6 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
             {loading ? 'Signing In...' : 'Sign In'}
           </Button>
         </form>
-        
-        <div className="mt-6 text-center space-y-2">
-          <div className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
-            <button
-              type="button"
-              onClick={onToggleMode}
-              className="text-primary hover:underline"
-            >
-              Sign up
-            </button>
-          </div>
-          
-          <div className="mt-4 p-3 bg-muted rounded-lg">
-            <p className="text-xs text-muted-foreground mb-2">Test Credentials:</p>
-            <div className="text-xs space-y-1">
-              <div>Username: <span className="font-mono">testuser</span> | Password: <span className="font-mono">testpass123</span></div>
-              <div>Username: <span className="font-mono">admin</span> | Password: <span className="font-mono">admin123</span></div>
-              <div>Username: <span className="font-mono">demo</span> | Password: <span className="font-mono">demo123</span></div>
-            </div>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

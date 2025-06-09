@@ -1,15 +1,22 @@
 
 import {
+  Calendar,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  ChevronUp,
+  User2,
+  LogOut,
   DollarSign,
   TrendingUp,
   TrendingDown,
-  PiggyBank,
+  Target,
   Heart,
   BarChart3,
-  Home,
-  Menu,
   Wallet
-} from "lucide-react";
+} from "lucide-react"
+
 import {
   Sidebar,
   SidebarContent,
@@ -17,15 +24,21 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { useLocation, Link } from "react-router-dom";
+  SidebarHeader,
+} from "@/components/ui/sidebar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useAuth } from "@/contexts/AuthContext"
 
-const menuItems = [
+// Menu items.
+const items = [
   {
     title: "Dashboard",
     url: "/",
@@ -44,7 +57,7 @@ const menuItems = [
   {
     title: "Budget",
     url: "/budget",
-    icon: PiggyBank,
+    icon: Target,
   },
   {
     title: "Wishlist",
@@ -55,71 +68,82 @@ const menuItems = [
     title: "Reports",
     url: "/reports",
     icon: BarChart3,
-  },
-];
+  }
+]
 
 export function AppSidebar() {
-  const location = useLocation();
+  const { user, logout } = useAuth();
 
   return (
-    <Sidebar className="border-r-0">
-      <SidebarHeader className="border-b border-sidebar-border p-4">
-        <div className="flex items-center gap-3">
-          <div className="gradient-orange p-2 rounded-lg">
-            <Wallet className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gradient-orange">FinFlow</h1>
-            <p className="text-sm text-muted-foreground">Financial Manager</p>
-          </div>
-        </div>
+    <Sidebar variant="inset">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div className="flex items-center gap-2 px-2 py-2">
+              <div className="gradient-orange p-2 rounded-lg">
+                <Wallet className="h-6 w-6 text-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-lg text-gradient-orange">FinFlow</span>
+                <span className="text-xs text-muted-foreground">Financial Manager</span>
+              </div>
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
-      
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-muted-foreground px-3 py-2">
-            Navigation
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => {
-                const isActive = location.pathname === item.url;
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      className={`group transition-all duration-200 ${
-                        isActive 
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90" 
-                          : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                      }`}
-                    >
-                      <Link to={item.url} className="flex items-center gap-3 px-3 py-2">
-                        <item.icon className={`h-5 w-5 transition-transform group-hover:scale-110 ${
-                          isActive ? "text-white" : ""
-                        }`} />
-                        <span className="font-medium">{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      
-      <SidebarFooter className="border-t border-sidebar-border p-4">
-        <div className="flex items-center gap-3 px-3 py-2">
-          <div className="h-8 w-8 rounded-full gradient-orange flex items-center justify-center">
-            <DollarSign className="h-4 w-4 text-white" />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium">Demo User</p>
-            <p className="text-xs text-muted-foreground">demo@finflow.com</p>
-          </div>
-        </div>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  <div className="gradient-orange p-2 rounded-full">
+                    <User2 className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">{user?.username}</span>
+                    <span className="truncate text-xs">{user?.email}</span>
+                  </div>
+                  <ChevronUp className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                side="bottom"
+                align="end"
+                sideOffset={4}
+              >
+                <DropdownMenuItem onClick={logout}>
+                  <LogOut />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }
