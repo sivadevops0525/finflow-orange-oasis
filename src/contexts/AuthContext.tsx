@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (username: string, password: string) => {
     try {
+      console.log('Attempting login with:', { username });
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -68,15 +69,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ username, password }),
       });
 
+      console.log('Login response status:', response.status);
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Login failed');
       }
 
       const data = await response.json();
+      console.log('Login successful:', data);
       localStorage.setItem('token', data.token);
       setUser(data.user);
     } catch (error) {
+      console.error('Login error:', error);
       throw error;
     }
   };
