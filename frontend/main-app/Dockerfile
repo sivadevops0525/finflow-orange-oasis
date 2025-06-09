@@ -1,3 +1,4 @@
+
 FROM node:18-alpine
 
 WORKDIR /app
@@ -14,11 +15,7 @@ COPY . .
 # Build the app
 RUN npm run build
 
-# Install serve to serve the built app
-RUN npm install -g serve
-
-# Expose port
+# Serve the app
 EXPOSE 3000
 
-# Serve the built app
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["npm", "run", "dev"]

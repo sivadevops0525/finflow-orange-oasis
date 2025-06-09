@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import jwt
@@ -9,7 +10,7 @@ CORS(app)
 # Configuration
 SECRET_KEY = 'your-secret-key-here'
 
-# Test credentials - Replace with your database logic
+# Test credentials
 TEST_USER = {
     'username': 'testuser',
     'password': 'testpass',

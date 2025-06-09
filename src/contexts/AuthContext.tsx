@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface User {
@@ -15,7 +16,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_URL = 'http://backend:5001';
+const API_URL = 'http://localhost:5001';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -86,6 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const register = async (username: string, email: string, password: string) => {
+    // Since we don't have a database, we'll just simulate registration
+    // In a real app, this would create a new user in the database
     throw new Error('Registration is not available in demo mode. Please use test credentials: testuser/testpass');
   };
 

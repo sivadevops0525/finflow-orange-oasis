@@ -1,99 +1,79 @@
+
 # FinFlow - Personal Financial Manager
 
-A clean and functional personal finance management application built with React and Flask.
+A beautiful and intuitive personal finance management application built with React and Flask.
 
-## 🚀 Quick Start with Docker
+## Features
+
+- 📊 Dashboard with financial overview
+- 💰 Income and expense tracking
+- 🎯 Budget management
+- 💝 Wishlist functionality
+- 📈 Financial reports and analytics
+- 🔐 Secure authentication
+
+## Quick Start
 
 ### Prerequisites
-- Docker and Docker Compose installed on your system
+- Python 3.8+
+- Node.js 16+
+- npm or yarn
 
-### Run the Application
-```bash
-# Clone this repository
-git clone <your-repo-url>
-cd finflow
+### Running the Application
 
-# Start the application with Docker Compose
-docker-compose up --build
+1. **Start the Backend** (in one terminal):
+   ```bash
+   python start-backend.py
+   ```
+   Or manually:
+   ```bash
+   cd backend/simple-auth
+   pip install -r requirements.txt
+   python app.py
+   ```
 
-# Access the application
-# Frontend: http://localhost:3000
-# Backend: http://localhost:5001
-```
+2. **Start the Frontend** (in another terminal):
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+3. **Access the Application**:
+   - Frontend: http://localhost:5173
+   - Backend: http://localhost:5001
 
 ### Test Credentials
-```
-Username: testuser
-Password: testpass
-```
+- Username: `testuser`
+- Password: `testpass`
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-finflow/
-├── frontend/                 # React frontend application
-│   ├── src/
-│   │   ├── components/       # React components
-│   │   ├── pages/           # Application pages
-│   │   ├── contexts/        # React contexts (AuthContext)
-│   │   └── ...
-│   ├── Dockerfile
-│   └── package.json
-├── backend/                  # Flask backend API
-│   ├── app.py               # Main Flask application
-│   ├── requirements.txt     # Python dependencies
-│   └── Dockerfile
-├── docker-compose.yml       # Docker Compose configuration
-└── README.md
+├── src/                    # Frontend React application
+│   ├── components/         # Reusable UI components
+│   ├── pages/             # Application pages
+│   ├── contexts/          # React contexts
+│   └── ...
+├── backend/               # Backend services
+│   └── simple-auth/       # Authentication service
+└── ...
 ```
 
-## 🔧 Local Development
+## Technologies Used
 
-### Backend Development
-```bash
-cd backend
-pip install -r requirements.txt
-python app.py
-```
-Backend runs on: http://localhost:5001
+- **Frontend**: React, TypeScript, Tailwind CSS, Shadcn/ui
+- **Backend**: Flask, PyJWT
+- **Charts**: Recharts
+- **Icons**: Lucide React
 
-### Frontend Development
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Frontend runs on: http://localhost:5173
+## Development
 
-## 🎯 Features
+The application is designed to be easily extensible. You can:
+- Replace test credentials with a real database
+- Add more financial features
+- Customize the UI theme
+- Integrate with external APIs
 
-- ✅ User Authentication (Login/Logout)
-- ✅ Dashboard Overview
-- ✅ Expense Tracking
-- ✅ Income Management
-- ✅ Budget Planning
-- ✅ Wishlist
-- ✅ Financial Reports
-- ✅ Responsive Design
-- ✅ Docker Support
+## License
 
-## 🛠️ Tech Stack
-
-- **Frontend:** React 18, TypeScript, Tailwind CSS, Shadcn/ui
-- **Backend:** Flask, PyJWT
-- **Authentication:** JWT tokens
-- **Charts:** Recharts
-- **Icons:** Lucide React
-- **Deployment:** Docker, Docker Compose
-
-## 📞 Support
-
-For issues or questions:
-1. Check the console logs in your browser
-2. Verify backend is running on the correct port
-3. Ensure frontend is pointing to the correct backend URL
-4. Check Docker containers are running: `docker-compose ps`
-
----
-
-**Note:** This is a demo application with hardcoded credentials. For production use, implement proper user management, database integration, and security measures.
+MIT License
