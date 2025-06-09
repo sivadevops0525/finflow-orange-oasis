@@ -2,80 +2,29 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15
-    container_name: finflow_postgres
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./backend/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
-    ports:
-      - "5432:5432"
-    networks:
-      - finflow_network
-
-  # Auth Service
-  auth-service:
-    build: ./backend/auth-service
-    container_name: finflow_auth
-    environment:
-      DATABASE_URL: postgresql://finflow:finflow123@postgres:5432/finflow_db
-      SECRET_KEY: your-super-secret-jwt-key-here
+  # Backend API
+  backend:
+    build: ./backend
+    container_name: finflow_backend
     ports:
       - "5001:5001"
-    depends_on:
-      - postgres
-    networks:
-      - finflow_network
-
-  # Finance Service
-  finance-service:
-    build: ./backend/finance-service
-    container_name: finflow_finance
     environment:
-      DATABASE_URL: postgresql://finflow:finflow123@postgres:5432/finflow_db
-      SECRET_KEY: your-super-secret-jwt-key-here
-    ports:
-      - "5002:5002"
-    depends_on:
-      - postgres
-    networks:
-      - finflow_network
-
-  # API Gateway
-  api-gateway:
-    build: ./backend/api-gateway
-    container_name: finflow_gateway
-    environment:
-      AUTH_SERVICE_URL: http://auth-service:5001
-      FINANCE_SERVICE_URL: http://finance-service:5002
-    ports:
-      - "5000:5000"
-    depends_on:
-      - auth-service
-      - finance-service
+      - FLASK_ENV=production
     networks:
       - finflow_network
 
   # Frontend
   frontend:
-    build: ./frontend/main-app
+    build: ./frontend
     container_name: finflow_frontend
-    environment:
-      VITE_API_URL: http://localhost:5000
     ports:
       - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5001
     depends_on:
-      - api-gateway
+      - backend
     networks:
       - finflow_network
-
-volumes:
-  postgres_data:
 
 networks:
   finflow_network:
