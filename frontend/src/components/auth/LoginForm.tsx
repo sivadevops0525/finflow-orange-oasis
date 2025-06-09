@@ -12,8 +12,8 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onToggleMode }: LoginFormProps) {
-  const [username, setUsername] = useState('testuser');
-  const [password, setPassword] = useState('testpass');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
 
@@ -67,19 +67,6 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
             {loading ? 'Signing In...' : 'Sign In'}
           </Button>
         </form>
-        
-        <div className="mt-6 text-center">
-          <div className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
-            <button
-              type="button"
-              onClick={onToggleMode}
-              className="text-primary hover:underline"
-            >
-              Register
-            </button>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

@@ -18,13 +18,6 @@ export function AuthPage() {
           </div>
           <h1 className="text-3xl font-bold text-gradient-orange">FinFlow</h1>
           <p className="text-muted-foreground">Your Personal Financial Manager</p>
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-700">
-              <strong>Demo Credentials:</strong><br />
-              Username: testuser<br />
-              Password: testpass
-            </p>
-          </div>
         </div>
         
         {isLogin ? (

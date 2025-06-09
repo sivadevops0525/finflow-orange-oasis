@@ -1,9 +1,14 @@
 
 import {
+  Calendar,
   Home,
+  Inbox,
+  Search,
+  Settings,
   ChevronUp,
   User2,
   LogOut,
+  DollarSign,
   TrendingUp,
   TrendingDown,
   Target,
@@ -32,6 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/contexts/AuthContext"
 
+// Menu items.
 const items = [
   {
     title: "Dashboard",
